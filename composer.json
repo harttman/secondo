@@ -1,0 +1,17 @@
+{
+    "name": "harttmann/secondo",
+    "description": "The easy framework for create telegramBot",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Secondo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "harttmann"
+        }
+    ],
+    "require": {}
+}

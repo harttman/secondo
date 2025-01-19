@@ -2,7 +2,7 @@
 
 ### instalation
 ```bash
-composer require harttman/secondo
+composer require harttmann/secondo
 ```
 
 # THIS LIB IS WORKING

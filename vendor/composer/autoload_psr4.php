@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Harttmann\\Secondo\\' => array($baseDir . '/src'),
+    'Secondo\\' => array($baseDir . '/src'),
 );

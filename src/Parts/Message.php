@@ -1,13 +1,13 @@
 <?php
 namespace Secondo\Parts;
 class Message {
-    public string $text;
-    public bool $isBot;
-    public string $languageCode;
+    public string|null $text;
+    public bool|null $isBot;
+    public string|null $languageCode;
     public function __construct($data) {
-        $this->text = $data["text"];
-        $this->isBot = $data["is_bot"];
-        $this->languageCode = $data["language_code"];
+        $this->text = $data->text ?? null;
+        $this->isBot = $data->from->is_bot ?? null;
+        $this->languageCode = $data->from->languageCode ?? null;
     }
 
     public function send() {}

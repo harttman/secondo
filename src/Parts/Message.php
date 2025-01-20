@@ -1,38 +1,46 @@
 <?php
 /**
  * @author harttman https://github.com/harttman
+ * @package Secondo
  */
 
 namespace Secondo\Parts;
 
 use Secondo\Utils\BaseApi;
 use Secondo\Parts\Chat;
+use Secondo\Parts\Member\User;
 
 class Message {
+    public int $message_id;
+    public ?User $from;
+    public ?int $sender_boost_count;
+    public ?int $date;
+    public Chat $chat;
+
     public ?string $text;
-    public ?int $id;
-    public ?bool $is_bot;
-    public ?string $language_code;
-    public ?Chat $chat;
+
     private BaseApi $api;
-    
     public function __construct(mixed $data, BaseApi $api) {
-        $this->text = $data->text ?? null;
-        $this->id = $data->id ?? null;
-        $this->is_bot = $data->is_bot ?? null;
-        $this->language_code = $data->language_code ?? null;
+        $this->api = $api;
+
+        $this->message_id = $data->message_id;
+        $this->message_thread_id = $data->message_thread_id ?? null;
+        $this->from = new User($data->from, $api);
+        $this->sender_boost_count = $data->sender_boost_count ?? null;
+        $this->date = $data->data ?? null;
         $this->chat = new Chat($data->chat, $api);
+        $this->text = $data->text ?? "";
     }
 
     /**
-     * Send message to specify chat. 
-     * @param int $id Chat-id
-     * @param string $text Content message
+     * Send message a sprecify chat.
+     * @param mixed $chat_id Chat id.
+     * @param mixed $text Content message.
      * @return void
      */
-    public function send(int $id, string $text) {
+    public function send($chat_id, $text) {
         $data = [
-            "chat_id" => $id,
+            "chat_id" => $chat_id,
             "text" => $text
         ];
 

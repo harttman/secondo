@@ -1,7 +1,7 @@
 <?php
 /**
- *  @author harttman https://github.com/harttman
- * code writen by harttman
+ * @author harttman https://github.com/harttman
+ * @package Secondo
  */
 
 namespace Secondo\Utils;

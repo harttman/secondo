@@ -1,6 +1,7 @@
 <?php
 /**
  * @author harttman https://github.com/harttman
+ * @package Secondo
  */
 
 namespace Secondo;

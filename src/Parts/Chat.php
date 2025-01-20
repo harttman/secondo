@@ -15,6 +15,11 @@ class Chat {
         $this->id = $data->id;
     }
 
+    /**
+     * Send to trigers chat.
+     * @param string $text Message text.
+     * @return void
+     */
     public function send(string $text) {
         $data = [
             "chat_id" => $this->id,

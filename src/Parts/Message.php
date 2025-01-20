@@ -25,7 +25,10 @@ class Message {
     }
 
     /**
-     * 
+     * Send message to specify chat. 
+     * @param int $id Chat-id
+     * @param string $text Content message
+     * @return void
      */
     public function send(int $id, string $text) {
         $data = [

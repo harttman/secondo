@@ -41,6 +41,7 @@ class Chat {
      * @param string $text The message text to send.
      * @param array $options Additional options for the message (e.g., parse_mode, disable_notification).
      * 
+     * @throws \LogicException
      * @return bool True if the message was sent successfully, false otherwise.
      */
     public function send(string $text, array $options = []): bool {

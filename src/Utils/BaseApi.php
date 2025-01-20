@@ -24,19 +24,18 @@ class BaseApi {
         return $this->apiUrl;
     }
 
-    /**
-     * Get url for send message.
-     * @return string
-     */
-    public function sendMessage(): string {
-        return "{$this->apiUrl}/sendMessage";
-    }
-
-    /**
-     * Get url for getUpdate.
-     * @return string
-     */
-    public function getUpdates(): string {
+    public function getUpdatesUrl(): string {
         return "{$this->apiUrl}/getUpdates";
     }
+
+   public function sendPost(string $post, mixed $data) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "{$this->apiUrl}/$post");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $r = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($r);
+   }
 }

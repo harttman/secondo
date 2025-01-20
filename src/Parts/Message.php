@@ -1,40 +1,38 @@
 <?php
+/**
+ * @author harttman https://github.com/harttman
+ */
+
 namespace Secondo\Parts;
+
 use Secondo\Utils\BaseApi;
+use Secondo\Parts\Chat;
+
 class Message {
-    public string|null $text;
-    public bool|null $is_bot;
-    public string|null $language_code;
-    public int|null $id;
-    public int|null $chat_id;
+    public ?string $text;
+    public ?int $id;
+    public ?bool $is_bot;
+    public ?string $language_code;
+    public ?Chat $chat;
     private BaseApi $api;
-    public function __construct($data, $token) {
+    
+    public function __construct(mixed $data, BaseApi $api) {
         $this->text = $data->text ?? null;
-        $this->isBot = $data->from->is_bot ?? null;
-        $this->language_code = $data->from->language_code ?? null;
-        $this->id = $data->message_id ?? null;
-        $this->chat_id = $data->chat->id ?? null;
-        $this->api = new BaseApi($token);
+        $this->id = $data->id ?? null;
+        $this->is_bot = $data->is_bot ?? null;
+        $this->language_code = $data->language_code ?? null;
+        $this->chat = new Chat($data->chat, $api);
     }
 
     /**
-     * sends a message to a specific chat.
-     * @param int $id Numeric ID of the chat.
-     * @param string $content content message.
-     * * @return void
+     * 
      */
-    public function send(int $id, string $content) {
-        $url = $this->api->sendMessage();
+    public function send(int $id, string $text) {
         $data = [
             "chat_id" => $id,
-            "text" => $content
+            "text" => $text
         ];
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_exec($ch);
-        curl_close($ch); 
+
+        $this->api->sendPost("sendMessage", $data);
     }
 }

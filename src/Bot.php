@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author harttman https://github.com/harttman
+ */
+
 namespace Secondo;
 
 use Secondo\Parts\Message;
@@ -6,18 +10,17 @@ use Secondo\Parts\Message;
 use Secondo\Utils\BaseApi;
 
 class Bot {
-    public string $token;
     private BaseApi $api;
     private int $offset;
-    public Message | null $message;
+    public ?Message $message;
     private array $eventHandler = [];
 
     public function __construct(string $token) {
-        $this->token = $token;
         $this->offset = 0;
         $this->message = null;
         $this->api = new BaseApi($token);
     }
+
 
     /**
      * Listener all events (etc. message).
@@ -54,7 +57,7 @@ class Bot {
     public function poll(): never {
        while(true) {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "{$this->api->getUpdates()}?offset={$this->offset}");
+        curl_setopt($ch, CURLOPT_URL, "{$this->api->getUpdatesUrl()}?offset={$this->offset}");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         $response = json_decode($result);
@@ -64,7 +67,7 @@ class Bot {
             foreach($response->result as $update) {
                 $this->offset = $update->update_id + 1;
                 if(isset($update->message)) {
-                    $this->message = new Message($update->message, $this->token);
+                    $this->message = new Message($update->message, $this->api);
                     $this->triggers('message', $this->message);
                 }
             }

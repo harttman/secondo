@@ -5,7 +5,8 @@
 composer require harttmann/secondo
 ```
 
-# THIS LIB IS WORKING
+# How to use this lib?
+*Easy...*
 
 ```php
 <?php
@@ -18,6 +19,7 @@ $bot->on("message", function($message) {
 $bot->poll();
 ```
 
+*use types to type your code*
 See `example` or `guide`!
 
 By harttman

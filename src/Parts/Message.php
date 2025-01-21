@@ -34,16 +34,26 @@ class Message {
 
     /**
      * Send message a sprecify chat.
-     * @param mixed $chat_id Chat id.
-     * @param mixed $text Content message.
+     * @param int $chat_id Chat id.
+     * @param string $text Content message.
      * @return void
      */
-    public function send($chat_id, $text) {
+    public function send(int $chat_id, string $text) {
         $data = [
             "chat_id" => $chat_id,
             "text" => $text
         ];
 
         $this->api->sendPost("sendMessage", $data);
+    }
+
+    public function sendPhoto(int $chat_id, string $photo, string $caption = null) {
+        $data = [
+            "chat_id" => $chat_id,
+            "photo" => new \CurlFile($photo),
+            "caption" => $caption ?? null
+        ];
+
+        return $this->api->sendMediaPost("sendPhoto", $data);
     }
 }

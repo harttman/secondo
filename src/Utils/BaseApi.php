@@ -38,4 +38,24 @@ class BaseApi {
         curl_close($ch);
         return json_decode($r);
    }
+
+   public function sendMediaPost(string $post, array $data) {
+        $ch = curl_init("{$this->getUrl()}/$post");
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: multipart/form-data",
+            ],
+            CURLOPT_POSTFIELDS => $data,
+            ]);
+        
+        $response = curl_exec($ch);
+        if(curl_errno($ch)) {
+            throw new \Exception("GET ERROR IN POST => ". curl_error($ch));
+        }
+
+        curl_close($ch);
+        return json_decode($response);
+   }
 }

@@ -269,4 +269,8 @@ $bot->poll();
 
 This guide should help you effectively use the `Chat` and `Message` methods to interact with chats and process messages in the **Secondo** framework.
 
+<<<<<<< HEAD
 BY VITALIY DAKIVA
+=======
+BY VITALIY DAKIVA
+>>>>>>> 752e2f0876978163ab021ee8a7196b5aa7936b84

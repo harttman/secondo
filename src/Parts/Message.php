@@ -24,7 +24,7 @@ class Message {
         $this->api = $api;
 
         $this->message_id = $data->message_id;
-        $this->message_thread_id = $data->message_thread_id ?? null;
+        //$this->message_thread_id = $data->message_thread_id ?? null;
         $this->from = new User($data->from, $api);
         $this->sender_boost_count = $data->sender_boost_count ?? null;
         $this->date = $data->data ?? null;

@@ -16,6 +16,10 @@ class Bot {
     public ?Message $message;
     private array $eventHandler = [];
 
+    /**
+     * Create client.
+     * @param string $token
+     */
     public function __construct(string $token) {
         $this->offset = 0;
         $this->message = null;

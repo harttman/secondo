@@ -58,4 +58,8 @@ class BaseApi {
         curl_close($ch);
         return json_decode($response);
    }
+
+   public function logError(string $message) {
+      return throw new \Exception($message);
+   }
 }

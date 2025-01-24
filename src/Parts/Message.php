@@ -57,6 +57,12 @@ class Message {
         $this->api->sendPost("sendLocation", array_merge($data, $options));
     }
 
+    /**
+     * Send photo a specify chat.
+     * @param int $chat_id Chat id
+     * @param string $string path to file.
+     * @param
+     */
     public function sendPhoto(int $chat_id, string $photo, string $caption = null) {
         $data = [
             "chat_id" => $chat_id,

@@ -44,22 +44,32 @@ class Chat {
      * @throws \LogicException
      * @return bool True if the message was sent successfully, false otherwise.
      */
-    public function send(string $text, array $options = []): bool {
-        if(empty($this->id)) {
-            throw new \LogicException("Cannot send a message: Chat ID is not get.");
-        }
-
+    public function send(string $text, array $options = []) {
+        if(empty($this->id)) $this->api->logError("ID was not received or was not specified");
         $data = array_merge([
             "chat_id" => $this->id,
             "text" => $text
         ], $options);
 
-        try {
-            $this->api->sendPost("sendMessage", $data);
-            return true;
-        } catch(\Exception $e) {
-            error_log("Failed to send message in chat: $e");
-            return false;
-        }
+       try {
+        
+       }
+    }
+    
+    public function leaveChat(int|string $chat_id = $this->id) {
+        $data = [
+            "chat_id" => $chat_id
+        ];
+        return $this->api->sendPost(
+            "leaveChat",
+            $data
+        );
+    }
+
+    public function getChatMemberCount(int|string $chat_id = $this->id) {
+        $data = [
+            "chat_id" => $chat_id,
+        ];
+        return $this->api->sendPost("getgetChatMemberCount", $data);
     }
 }

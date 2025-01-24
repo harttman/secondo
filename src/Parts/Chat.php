@@ -52,7 +52,7 @@ class Chat {
         ], $options);
 
        try {
-        
+          return $this->api->sendPost()
        }
     }
     
@@ -70,6 +70,6 @@ class Chat {
         $data = [
             "chat_id" => $chat_id,
         ];
-        return $this->api->sendPost("getgetChatMemberCount", $data);
+        return $this->api->sendPost("getChatMemberCount", $data);
     }
 }

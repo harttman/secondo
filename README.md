@@ -13,7 +13,7 @@ composer require harttmann/secondo
 include __DIR__."/vendor/autoload.php";
 $bot = new  Bot("TOKEN");
 $bot->on("message", function($message) {
-    $message->send("hw");
+    $message->chat->send("hw");
 });
 
 $bot->poll();

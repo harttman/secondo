@@ -13,5 +13,7 @@
             "name": "harttman"
         }
     ],
-    "require": {}
+    "require": {
+        "monolog/monolog": "^3.8.1"
+    }
 }

@@ -40,25 +40,27 @@ class Chat {
      * 
      * @param string $text The message text to send.
      * @param array $options Additional options for the message (e.g., parse_mode, disable_notification).
-     * 
-     * @throws \LogicException
-     * @return bool True if the message was sent successfully, false otherwise.
+     * .
      */
     public function send(string $text, array $options = []) {
-        if(empty($this->id)) $this->api->logError("ID was not received or was not specified");
+        if(empty($this->id)) $this->api->logger->critical("CANNOT GET ID!");
         $data = array_merge([
             "chat_id" => $this->id,
             "text" => $text
         ], $options);
 
        try {
-          return $this->api->sendPost()
-       }
+          return $this->api->sendPost(
+            "sendMessage",
+            $data
+          );
+       } catch(\Exception $e) {}
     }
     
-    public function leaveChat(int|string $chat_id = $this->id) {
+    public function leaveChat(string|int $chat_id = null) {
+        if($chat_id === null) $chat_id = $this->id;
         $data = [
-            "chat_id" => $chat_id
+            "chat_id" => $chat_id 
         ];
         return $this->api->sendPost(
             "leaveChat",
@@ -66,7 +68,8 @@ class Chat {
         );
     }
 
-    public function getChatMemberCount(int|string $chat_id = $this->id) {
+    public function getChatMemberCount(string|int $chat_id = null) {
+        if($chat_id === null) $chat_id = $this->id;
         $data = [
             "chat_id" => $chat_id,
         ];

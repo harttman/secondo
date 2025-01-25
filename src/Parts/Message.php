@@ -6,6 +6,7 @@
 
 namespace Secondo\Parts;
 
+use Secondo\Game\Dice;
 use Secondo\Utils\BaseApi;
 use Secondo\Parts\Chat;
 use Secondo\Parts\Member\User;
@@ -78,14 +79,18 @@ class Message {
      * @param int $chat_id Chat id.
      * @param string $emoji Emoji on which the dice throw animation is based. Currently, must be one of “🎲”, “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”, “🎯” and “🎳”, values 1-5 for “🏀” and “⚽”, and values 1-64 for “🎰”. Defaults to “🎲”`
      * 
-     * @return mixed
+     * @return array Returns an associative array of 'emoji' => dice and 'value' => (🎲 1..6).
     */
-    public function sendDice(int $chat_id, string $emoji) {
+    public function sendDice(int $chat_id, string $emoji): array {
         $data = [
             "chat_id" => $chat_id,
             "emoji" => $emoji
         ];
 
-        return $this->api->sendPost("sendDice", $data);
+        $r = $this->api->sendPost("sendDice", $data);
+        return [
+            "emoji" => $r->result->dice->emoji,
+            "value" => $r->result->dice->value
+        ];
     }
 }

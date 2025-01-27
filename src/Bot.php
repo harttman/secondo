@@ -64,7 +64,7 @@ class Bot {
     
         while ($this->running) {
             if (time() - $lastLogTime > 60) {
-                $this->api->logger->info("Join the Telegram...");
+                $this->api->logger->info("Send request to connect");
                 $lastLogTime = time();
             }
     
@@ -91,13 +91,13 @@ class Bot {
                 sleep(1);
                 continue;
             }
-    
             if ($response->ok === false) {
                 $this->api->logger->critical("Failed to connect to API", [
                     "Ok" => $response->ok
                 ]);
             }
-    
+
+
             if (isset($response->result)) {
                 foreach ($response->result as $update) {
                     $this->offset = $update->update_id + 1;
@@ -107,7 +107,6 @@ class Bot {
                     }
                 }
             }
-    
             sleep(1);
         }
     }

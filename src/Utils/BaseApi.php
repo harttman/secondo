@@ -20,9 +20,10 @@ class BaseApi {
     public function __construct(string $token) {
         $this->apiUrl = "https://api.telegram.org/bot{$token}";
         $this->logger = new Logger("SECONDO: ");
-        $this->logger->pushHandler(new StreamHandler(__DIR__."/../../secondo.log", Level::Warning));
-        $consoleHandler = new StreamHandler('php://stdout', Level::Warning);
+        $consoleHandler = new StreamHandler('php://stdout', Level::Info);
+        $consoleHandlerWarning = new StreamHandler('php://stdout', Level::Warning);
         $this->logger->pushHandler($consoleHandler);
+        $this->logger->pushHandler($consoleHandlerWarning);
     }
 
     /**
@@ -38,7 +39,7 @@ class BaseApi {
     }
 
    public function sendPost(string $post, mixed $data) {
-        $this->logger->info("Send post $post..");
+        $this->logger->info("App want sent [$post]");
         try {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "{$this->apiUrl}/$post");
@@ -50,6 +51,7 @@ class BaseApi {
             return json_decode($r);
         } catch(\Exception $e) {
             $this->logger->critical("Send post [$post] is error!: {$e->getMessage()}");
+            return null;
         }
    }
 
@@ -70,6 +72,9 @@ class BaseApi {
             print_r($response);
             curl_close($ch);
             return json_decode($response);
-        } catch(\Exception $e) {}
+        } catch(\Exception $e) {
+            $this->logger->critical("SendMedia request failed: {$e->getMessage()}");
+            return null;
+        }
    }
 }

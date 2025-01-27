@@ -6,6 +6,7 @@
 
 namespace Secondo\Parts;
 
+use Secondo\Files\Audio;
 use Secondo\Game\Dice;
 use Secondo\Utils\BaseApi;
 use Secondo\Parts\Chat;
@@ -16,6 +17,9 @@ class Message {
     public ?User $from;
     public ?int $sender_boost_count;
     public ?int $date;
+
+    public Audio $audio;
+
     public Chat $chat;
 
     public ?string $text;
@@ -30,6 +34,8 @@ class Message {
         $this->sender_boost_count = $data->sender_boost_count ?? null;
         $this->date = $data->data ?? null;
         $this->chat = new Chat($data->chat, $api);
+        print_r($data);
+        $this->audio = new Audio($data->audio, $api);
         $this->text = $data->text ?? "";
     }
 
@@ -79,7 +85,7 @@ class Message {
      * @param int $chat_id Chat id.
      * @param string $emoji Emoji on which the dice throw animation is based. Currently, must be one of “🎲”, “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”, “🎯” and “🎳”, values 1-5 for “🏀” and “⚽”, and values 1-64 for “🎰”. Defaults to “🎲”`
      * 
-     * @return array Returns an associative array of 'emoji' => dice and 'value' => (🎲 1..6).
+     * @return array Returns an associative array of 'emoji' => dice and 'value' => (🎲 1..6). Or [] if failed.
     */
     public function sendDice(int $chat_id, string $emoji): array {
         $data = [
@@ -88,9 +94,17 @@ class Message {
         ];
 
         $r = $this->api->sendPost("sendDice", $data);
-        return [
-            "emoji" => $r->result->dice->emoji,
-            "value" => $r->result->dice->value
-        ];
+
+        if(isset($r->ok) && $r->ok == 1) {
+            $this->api->logger->info("Dice sent to $chat_id with emoji {$r->result->dice->emoji} and value {$r->result->dice->value}");
+            
+            return [
+                "emoji" => $r->result->dice->emoji,
+                "value" => $r->result->dice->value
+            ];
+        } else {
+            $this->api->logger->alert("Failed to send dice to $chat_id.");
+            return [];
+        }
     }
 }

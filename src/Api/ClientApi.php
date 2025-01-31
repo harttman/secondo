@@ -1,13 +1,16 @@
 <?php
 namespace Secondo\Api;
 use GuzzleHttp\Client;
+use Secondo\Logger\ClientLogger;
 
 class ClientApi
 {
     public Client $api;
+    public ClientLogger $logger;
     private string $url;
     public function __construct(string $token)
     {
+        $this->logger = new ClientLogger();
         $this->url = "https://api.telegram.org/bot$token";
         $this->api = new Client([
             "timeout" => 2.0,

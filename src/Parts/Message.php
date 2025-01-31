@@ -2,6 +2,9 @@
 namespace Secondo\Parts;
 
 use Secondo\Api\ClientApi;
+use Secondo\Constants\Dice as C_Dice;
+use Secondo\Parts\Game\Dice;
+use Secondo\Parts\Member\From;
 
 class Message
 {
@@ -11,7 +14,8 @@ class Message
     public string $username;
     public string $language_code;
     public string $text;
-    public int $chat_id;
+    public Chat $chat;
+    public From $from;
     private ClientApi $api;
     public function __construct(mixed $data, ClientApi $api)
     {
@@ -22,14 +26,39 @@ class Message
         $this->username = $data->from->username ?? "";
         $this->language_code = $data->from->language_code ?? "";
         $this->text = $data->text ?? "";
-        $this->chat_id = $data->chat->id;
+        
+        $this->from = new From($data->from);
+        $this->chat = new Chat($data->chat, $api);
     }
 
+    /**
+     * Sends a message to a specific chat.
+     * @param int $chat_id The chat ID to which the string context will be sent.
+     * @param string $content The content of the message can be anything but an empty line!
+     * @return string
+     */
     public function sendMessage(int $chat_id, string $content): string
     {
         return $this->api->sendPost("sendMessage", [
             "chat_id" => $chat_id,
             "text" => $content,
         ]);
+    }
+
+    /**
+     * Sends a dice to the chat with the specified ID, returning Class Dice
+     * @param int $chat_id Chat ID where the dice will be sent
+     * @param C_Dice|string $dice The dice itself is a regular emoji, use an Enumeration (recommended) or a string with an emoji
+     * @return Dice The class returns two properties, the dice value and the emoji
+     */
+    public function sendDice(int $chat_id, C_Dice|string $dice): Dice
+    {
+        $r = json_decode(
+            $this->api->sendPost("sendDice", [
+                "chat_id" => $chat_id,
+                "emoji" => $dice,
+            ])
+        );
+        return new Dice($r->result->dice);
     }
 }

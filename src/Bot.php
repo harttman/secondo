@@ -13,12 +13,22 @@ class Bot
     private array $eventHandler = [];
     public Message $message;
 
+    /**
+     * Creating your client and connecting it to the Telegram API.
+     * @param array $params Takes an associative array with values, the main value being "token"
+     */
     public function __construct(array $params)
     {
         $this->params = $params;
         $this->api = new ClientApi($params["token"]);
     }
 
+    /**
+     * Event handler, you can see the available events in the documentation!
+     * @param string $event Events you want to process
+     * @param callable $function An event callback function; in the body of the function you can configure the bot’s response to different triggers.
+     * @return void
+     */
     public function on(string $event, callable $function): void
     {
         if (!isset($this->eventHandler[$event])) {
@@ -36,7 +46,11 @@ class Bot
         }
     }
 
-    public function poll(): void
+    /**
+     * Trying to connect your client to the telegram api, does not accept an argument, starts a constant loop.
+     * @return never
+     */
+    public function poll(): never
     {
         while (true) {
             try {

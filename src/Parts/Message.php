@@ -37,18 +37,20 @@ class Message
      * @param string $content The content of the message can be anything but an empty line!
      * @return void
      */
-    public function sendMessage(int $chat_id, string $content): void
+    public function sendMessage(int $chat_id, string $content, $options = []): void
     {
-        $this->api->logger->logger->notice("I try send message!", 
-        [
-            "error_code" => "0"
-        ]
-        );
-
-        $r = json_decode($this->api->sendPost("sendMessage", [
+        $data = array_merge([
             "chat_id" => $chat_id,
-            "text" => $content,
-        ]));
+            "text" => $content
+        ], $options);
+
+        $this->api->logger->logger->notice("I'm trying to send a message to chat!", 
+        [
+            "error_code" => "0",
+            $data,
+        ]);
+
+        $r = json_decode($this->api->sendPost("sendMessage", $data));
 
         if($r->ok) $this->api->logger->logger->info("I successfuly send message!", ["error_code" => "0"]);
 
@@ -60,19 +62,21 @@ class Message
      * @param C_Dice|string $dice The dice itself is a regular emoji, use an Enumeration (recommended) or a string with an emoji
      * @return Dice The class returns two properties, the dice value and the emoji
      */
-    public function sendDice(int $chat_id, C_Dice|string $dice = C_DICE::DICE): Dice
+    public function sendDice(int $chat_id, C_Dice|string $dice = C_DICE::DICE, array $options = []): Dice
     {
-        $this->api->logger->logger->notice("I try send message!", [
-            "eror_code" => "1"
+        $data = array_merge([
+            "chat_id" => $chat_id,
+            "emoji" => $dice
+        ], $options);
+
+        $this->api->logger->logger->notice("I'm trying to send dice to chat!", [
+            "eror_code" => "0",
+            $data
         ]);
 
-        $r = json_decode(
-            $this->api->sendPost("sendDice", [
-                "chat_id" => $chat_id,
-                "emoji" => $dice,
-            ])
-        );
-        if($r->ok) $this->api->logger->logger->info("Dice send success!", [
+        $r = json_decode($this->api->sendPost("sendDice", $data));
+
+        if($r->ok) $this->api->logger->logger->info("I successfully sent a dice to the chat!!", [
             "error_code" => "0",
             "value" => $r->result->dice->value
         ]);

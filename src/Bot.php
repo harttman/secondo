@@ -52,6 +52,7 @@ class Bot
      */
     public function poll(): never
     {
+        $this->api->logger->logger->notice("I’m initializing the client, trying to create a loop and connect the bot!");
         while (true) {
             try {
                 $response = json_decode(
@@ -59,15 +60,17 @@ class Bot
                         "offset" => $this->offset,
                     ])
                 );
-
+                $this->api->logger->logger->info("The first GET post was sent, the offset was transferred.");
                 foreach ($response->result as $update) {
                     $this->offset = $update->update_id + 1;
+                    $this->api->logger->logger->info("We received a response from telegram...");
                     if (isset($update->message)) {
                         $this->message = new Message(
                             $update->message,
                             $this->api
                         );
                         $this->triggers("message", $this->message);
+                        $this->api->logger->logger->notice("The handlers are updated, offset = update_id + 1.");
                     }
                 }
             } catch (GuzzleException $e) {
